@@ -16,6 +16,7 @@ time.
     * [Getting exchange rates for specific date](#getting-exchange-rates-for-specific-date)
     * [Converting `full` file to date-price map/dict](#converting-full-file-to-date-price-mapdict)
     * [Converting `full` files to array/list](#converting-full-files-to-arraylist)
+- [Currencies](#currencies)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -210,6 +211,47 @@ fetch('https://raw.githubusercontent.com/SamadiPour/rial-exchange-rates-archive/
         console.error('Error:', error)
     })
 ```
+
+# Currencies
+
+| Flag | Currency          | Code |
+|:----:|-------------------|:----:|
+| 🇺🇸 | US Dollar         | USD  |
+| 🇪🇺 | Euro              | EUR  |
+| 🇬🇧 | British Pound     | GBP  |
+| 🇨🇭 | Swiss Franc       | CHF  |
+| 🇨🇦 | Canadian Dollar   | CAD  |
+| 🇦🇺 | Australian Dollar | AUD  |
+| 🇸🇪 | Swedish Krona     | SEK  |
+| 🇳🇴 | Norwegian Krone   | NOK  |
+| 🇷🇺 | Russian Ruble     | RUB  |
+| 🇹🇭 | Thai Baht         | THB  |
+| 🇸🇬 | Singapore Dollar  | SGD  |
+| 🇭🇰 | Hong Kong Dollar  | HKD  |
+| 🇦🇿 | Azerbaijani Manat | AZN  |
+| 🇦🇲 | 10 Armenian Dram  | AMD  |
+| 🇩🇰 | Danish Krone      | DKK  |
+| 🇦🇪 | UAE Dirham        | AED  |
+| 🇯🇵 | 10 Japanese Yen   | JPY  |
+| 🇹🇷 | Turkish Lira      | TRY  |
+| 🇨🇳 | Chinese Yuan      | CNY  |
+| 🇸🇦 | Saudi Riyal       | SAR  |
+| 🇮🇳 | Indian Rupee      | INR  |
+| 🇲🇾 | Malaysian Ringgit | MYR  |
+| 🇦🇫 | Afghan Afghani    | AFN  |
+| 🇰🇼 | Kuwaiti Dinar     | KWD  |
+| 🇮🇶 | 100 Iraqi Dinar   | IQD  |
+| 🇧🇭 | Bahraini Dinar    | BHD  |
+| 🇴🇲 | Omani Rial        | OMR  |
+| 🇶🇦 | Qatari Rial       | QAR  |
+
+| Coins   | Code     |
+|---------|----------|
+| Azadi   | azadi1   |
+| Emami   | emami1   |
+| ½ Azadi | azadi1_2 |
+| ¼ Azadi | azadi1_4 |
+| Gerami  | azadi1g  |
 
 ## Contributing
 
