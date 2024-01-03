@@ -1,0 +1,40 @@
+name: Daily Data Update
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  update_data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip install bonbast jdatetime
+
+      - name: Run get_next.py and aggregator.py
+        run: |
+          while true
+          do
+            yesterday=$(date -d "yesterday" +%Y/%m/%d)
+            if [ -f "gregorian/$yesterday" ]; then
+              break
+            fi
+            python get_next.py
+          done
+          python aggregator.py
+
+      - name: Commit and Push Changes
+        run: |
+          git add gregorian/* jalali/*
+          git commit -m "Update data - $(date +'%Y/%m/%d')"
+          git push
