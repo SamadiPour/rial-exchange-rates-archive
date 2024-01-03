@@ -14,6 +14,7 @@ Please note that all prices in this repository are in `Toman`.
 - [Structure](#structure)
     * [`{year}/{month}/{day}` file model](#yearmonthday-file-model)
     * [`full` file model](#full-file-model)
+- [Releases](#releases)
 - [Usage](#usage)
     * [Getting exchange rates for specific date](#getting-exchange-rates-for-specific-date)
     * [Converting `full` file to date-price map/dict](#converting-full-file-to-date-price-mapdict)
@@ -75,6 +76,19 @@ This file contains every single day with the same DTO structure.
   }
 }
 ```
+
+## Releases
+
+Every night, the automated scripts generate three types of release files:
+
+- `_all.json` file: Contains all the information from the start
+- `_all.min.json` file: Similar to the previous one, but whitespaces and the `name` field (from currency DTO) removed
+- `_imp.min.json` file: Similar to the previous one, but only for USD, EUR, and GBP
+
+> Note: Only the last 10 releases are retained. That means you always have to a get the last one like this:
+> ```bash
+> curl -Ls https://github.com/SamadiPour/rial-exchange-rates-archive/releases/latest/download/gregorian_imp.min.json | jq
+> ```
 
 ## Usage
 
