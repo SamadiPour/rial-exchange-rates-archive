@@ -108,6 +108,8 @@ response = requests.get(
 )
 response.raise_for_status()
 prices = json.loads(response.text)
+print(prices)
+print(prices.get('usd', {}).get('buy', None))
 ```
 
 ```js
@@ -115,7 +117,8 @@ prices = json.loads(response.text)
 fetch('https://raw.githubusercontent.com/SamadiPour/rial-exchange-rates-archive/main/jalali/1395/05/01')
     .then(response => response.json())
     .then(data => {
-        console.log(data)
+        console.log(data);
+        console.log(data.usd.buy);
     })
     .catch(error => {
         console.error('Error:', error)
@@ -151,7 +154,8 @@ response = requests.get(
 )
 response.raise_for_status()
 data = json.loads(response.text)
-output_dict = {key: value['eur']['buy'] for key, value in data.items()}
+prices = {key: value['eur']['buy'] for key, value in data.items()}
+print(prices)
 ```
 
 ```js
@@ -162,6 +166,7 @@ fetch('https://raw.githubusercontent.com/SamadiPour/rial-exchange-rates-archive/
         const prices = Object.fromEntries(
             Object.entries(data).map(([key, value]) => [key, value.usd.sell])
         );
+        console.log(prices);
     })
     .catch(error => {
         console.error('Error:', error)
@@ -184,7 +189,7 @@ Examples:
 
 ```bash
 # == Bash + jq ==
-curl -s https://raw.githubusercontent.com/SamadiPour/rial-exchange-rates-archive/main/gregorian/2015/10/full | jq '[.[] | .usd.price]'
+curl -s https://raw.githubusercontent.com/SamadiPour/rial-exchange-rates-archive/main/gregorian/2015/10/full | jq '[.[] | .usd.buy]'
 ```
 
 ```python
@@ -197,7 +202,8 @@ response = requests.get(
 )
 response.raise_for_status()
 data = json.loads(response.text)
-prices = (value["eur"]["price"] for value in data.values())
+prices = (value["eur"]["buy"] for value in data.values())
+print(prices)
 ```
 
 ```js
@@ -206,6 +212,7 @@ fetch('https://raw.githubusercontent.com/SamadiPour/rial-exchange-rates-archive/
     .then(response => response.json())
     .then(data => {
         const prices = Object.values(data).map(item => item.usd.sell);
+        console.log(prices);
     })
     .catch(error => {
         console.error('Error:', error)
