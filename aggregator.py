@@ -37,48 +37,48 @@ def walker(base_directory: str, dt):
         # monthly
         for month in month_directories:
             path = os.path.join(base_directory, year, month)
-            if os.path.exists(os.path.join(path, 'full')):
-                continue
+            # if os.path.exists(os.path.join(path, 'full')):
+            #     continue
 
-            date = dt.datetime.strptime(f'{year}/{month}', '%Y/%m')
-            last_date_in_month = date.replace(
-                year=date.year + 1 if date.month == 12 else date.year,
-                month=1 if date.month == 12 else date.month + 1,
-                day=1
-            ) - dt.timedelta(days=1)
-            if os.path.exists(os.path.join(path, last_date_in_month.strftime('%d'))):
-                aggregated_json = aggregator(
-                    sorted(
-                        [
-                            os.path.join(path, f) for f in os.listdir(path)
-                            if os.path.isfile(os.path.join(path, f)) and f.isdigit()
-                        ],
-                    )
+            # date = dt.datetime.strptime(f'{year}/{month}', '%Y/%m')
+            # last_date_in_month = date.replace(
+            #     year=date.year + 1 if date.month == 12 else date.year,
+            #     month=1 if date.month == 12 else date.month + 1,
+            #     day=1
+            # ) - dt.timedelta(days=1)
+            # if os.path.exists(os.path.join(path, last_date_in_month.strftime('%d'))):
+            aggregated_json = aggregator(
+                sorted(
+                    [
+                        os.path.join(path, f) for f in os.listdir(path)
+                        if os.path.isfile(os.path.join(path, f)) and f.isdigit()
+                    ],
                 )
-                with open(os.path.join(path, 'full'), "w") as f:
-                    json.dump(aggregated_json, f)
+            )
+            with open(os.path.join(path, 'full'), "w") as f:
+                json.dump(aggregated_json, f)
 
         # yearly
         path = os.path.join(base_directory, year)
-        if os.path.exists(os.path.join(path, 'full')):
-            continue
+        # if os.path.exists(os.path.join(path, 'full')):
+        #     continue
 
-        date = dt.datetime.strptime(f'{year}', '%Y')
-        last_date_in_year = date.replace(year=date.year + 1, month=1, day=1) - dt.timedelta(days=1)
+        # date = dt.datetime.strptime(f'{year}', '%Y')
+        # last_date_in_year = date.replace(year=date.year + 1, month=1, day=1) - dt.timedelta(days=1)
         file_list = []
-        if os.path.exists(os.path.join(path, last_date_in_year.strftime('%m'), last_date_in_year.strftime('%d'))):
-            for month in month_directories:
-                file_list.extend(
-                    sorted(
-                        [
-                            os.path.join(path, month, f) for f in os.listdir(os.path.join(path, month))
-                            if os.path.isfile(os.path.join(path, month, f)) and f.isdigit()
-                        ],
-                    )
+        # if os.path.exists(os.path.join(path, last_date_in_year.strftime('%m'), last_date_in_year.strftime('%d'))):
+        for month in month_directories:
+            file_list.extend(
+                sorted(
+                    [
+                        os.path.join(path, month, f) for f in os.listdir(os.path.join(path, month))
+                        if os.path.isfile(os.path.join(path, month, f)) and f.isdigit()
+                    ],
                 )
-            aggregated_json = aggregator(file_list)
-            with open(os.path.join(path, 'full'), "w") as f:
-                json.dump(aggregated_json, f)
+            )
+        aggregated_json = aggregator(file_list)
+        with open(os.path.join(path, 'full'), "w") as f:
+            json.dump(aggregated_json, f)
 
 
 walker('gregorian', datetime)
