@@ -1,0 +1,107 @@
+{
+  "usd": {
+    "name": "US Dollar",
+    "sell": 3325,
+    "buy": 3315
+  },
+  "eur": {
+    "name": "Euro",
+    "sell": 3660,
+    "buy": 3645
+  },
+  "gbp": {
+    "name": "British Pound",
+    "sell": 5100,
+    "buy": 5070
+  },
+  "chf": {
+    "name": "Swiss Franc",
+    "sell": 3530,
+    "buy": 3505
+  },
+  "cad": {
+    "name": "Canadian Dollar",
+    "sell": 2715,
+    "buy": 2695
+  },
+  "aud": {
+    "name": "Australian Dollar",
+    "sell": 2575,
+    "buy": 2535
+  },
+  "sek": {
+    "name": "Swedish Krona",
+    "sell": 388,
+    "buy": 383
+  },
+  "nok": {
+    "name": "Norwegian Krone",
+    "sell": 430,
+    "buy": 424
+  },
+  "dkk": {
+    "name": "Danish Krone",
+    "sell": 490,
+    "buy": 485
+  },
+  "aed": {
+    "name": "UAE Dirham",
+    "sell": 909,
+    "buy": 904
+  },
+  "jpy": {
+    "name": "10 Japanese Yen",
+    "sell": 28,
+    "buy": 27
+  },
+  "try": {
+    "name": "Turkish Lira",
+    "sell": 1290,
+    "buy": 1270
+  },
+  "cny": {
+    "name": "Chinese Yuan",
+    "sell": 555,
+    "buy": 535
+  },
+  "sar": {
+    "name": "Saudi Riyal",
+    "sell": 890,
+    "buy": 870
+  },
+  "inr": {
+    "name": "Indian Rupee",
+    "sell": 53,
+    "buy": 48
+  },
+  "myr": {
+    "name": "Malaysian Ringgit",
+    "sell": 920,
+    "buy": 895
+  },
+  "azadi1": {
+    "name": "azadi",
+    "sell": 930000,
+    "buy": 920000
+  },
+  "emami1": {
+    "name": "emami",
+    "sell": 932000,
+    "buy": 922000
+  },
+  "azadi1_2": {
+    "name": "½ azadi",
+    "sell": 479000,
+    "buy": 469000
+  },
+  "azadi1_4": {
+    "name": "¼ azadi",
+    "sell": 268000,
+    "buy": 258000
+  },
+  "azadi1g": {
+    "name": "gerami",
+    "sell": 185000,
+    "buy": 175000
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "usd": {
+    "name": "US Dollar",
+    "sell": 2800,
+    "buy": 2700
+  },
+  "eur": {
+    "name": "Euro",
+    "sell": 3700,
+    "buy": 3570
+  },
+  "gbp": {
+    "name": "British Pound",
+    "sell": 4600,
+    "buy": 4400
+  },
+  "cad": {
+    "name": "Canadian Dollar",
+    "sell": 2800,
+    "buy": 2700
+  },
+  "aud": {
+    "name": "Australian Dollar",
+    "sell": 2900,
+    "buy": 2780
+  },
+  "aed": {
+    "name": "UAE Dirham",
+    "sell": 780,
+    "buy": 730
+  },
+  "try": {
+    "name": "Turkish Lira",
+    "sell": 1590,
+    "buy": 1490
+  },
+  "sar": {
+    "name": "Saudi Riyal",
+    "sell": 760,
+    "buy": 710
+  },
+  "inr": {
+    "name": "Indian Rupee",
+    "sell": 55,
+    "buy": 47
+  }
+}
