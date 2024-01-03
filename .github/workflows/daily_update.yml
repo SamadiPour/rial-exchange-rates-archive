@@ -55,7 +55,14 @@ jobs:
         run: |
           python artifact_generator.py
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload result as release
+        uses: ncipollo/release-action@v1
         with:
-          path: artifact
+          artifacts: "artifact/*"
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: dev-drprasad/delete-older-releases@v0.3.2
+        with:
+          keep_latest: 14
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
