@@ -7,6 +7,8 @@ workflow.
 The primary goal of this repository is to maintain a comprehensive historical record of Iranian Rial exchange rates over
 time.
 
+Please note that all prices in this repository are in `Toman`.
+
 ## Table of Contents
 
 - [Structure](#structure)
