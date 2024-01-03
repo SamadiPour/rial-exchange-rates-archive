@@ -1,0 +1,7 @@
+{
+  "usd": {
+    "name": "US Dollar",
+    "sell": 3600,
+    "buy": 3550
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "usd": {
+    "name": "US Dollar",
+    "sell": 3050,
+    "buy": 2950
+  },
+  "eur": {
+    "name": "Euro",
+    "sell": 3970,
+    "buy": 3820
+  },
+  "aed": {
+    "name": "UAE Dirham",
+    "sell": 870,
+    "buy": 830
+  },
+  "sar": {
+    "name": "Saudi Riyal",
+    "sell": 870,
+    "buy": 820
+  }
+}
