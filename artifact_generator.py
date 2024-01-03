@@ -7,6 +7,18 @@ import jdatetime
 artifact_dir = 'artifact'
 
 
+def remove_nested_key(data, key):
+    if isinstance(data, dict):
+        for k in list(data.keys()):
+            if k == key:
+                del data[k]
+            else:
+                remove_nested_key(data[k], key)
+    elif isinstance(data, list):
+        for item in data:
+            remove_nested_key(item, key)
+
+
 def aggregator(files: iter) -> dict:
     date_json_map = dict()
     for file_path in files:
@@ -46,6 +58,17 @@ def walker(base_directory: str, dt):
     os.makedirs(artifact_dir, exist_ok=True)
     with open(os.path.join(artifact_dir, f'{base_directory}_all.json'), "w") as f:
         json.dump(aggregated_json, f)
+
+    remove_nested_key(aggregated_json, 'name')
+    with open(os.path.join(artifact_dir, f'{base_directory}_all.min.json'), "w") as f:
+        json.dump(aggregated_json, f, separators=(",", ":"))
+
+    for date, currencies in aggregated_json.items():
+        for currency in list(currencies.keys()):
+            if currency not in ['usd', 'eur', 'gbp']:
+                currencies.pop(currency)
+    with open(os.path.join(artifact_dir, f'{base_directory}_imp.min.json'), "w") as f:
+        json.dump(aggregated_json, f, separators=(",", ":"))
 
 
 walker('gregorian', datetime)
