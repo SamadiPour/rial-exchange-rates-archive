@@ -10,6 +10,11 @@ on:
         description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
         required: false
         default: false
+      force_update:
+        type: boolean
+        description: 'Force update the data even if there are no changes'
+        required: false
+        default: false
 
 permissions:
   contents: write
@@ -63,25 +68,41 @@ jobs:
           git push
 
       - name: Generate artifacts
-        if: steps.verify_diff.outputs.changed == 'true'
+        if: steps.verify_diff.outputs.changed == 'true' || inputs.force_update
         run: |
           echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "RELEASE_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           python artifact_generator.py
 
       - name: Upload result as release
-        if: steps.verify_diff.outputs.changed == 'true'
+        if: steps.verify_diff.outputs.changed == 'true' || inputs.force_update
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "artifact/*"
+          artifacts: "artifact/*.*"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.TAG_NAME }}
           name: ${{ env.RELEASE_NAME }}
 
       - name: Delete old releases
-        if: steps.verify_diff.outputs.changed == 'true'
+        if: steps.verify_diff.outputs.changed == 'true' || inputs.force_update
         uses: dev-drprasad/delete-older-releases@v0.3.2
         with:
           keep_latest: 10
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push artifacts to data branch
+        if: steps.verify_diff.outputs.changed == 'true' || inputs.force_update
+        run: |
+          mv -r artifact/ ../
+          git fetch origin
+          if git show-ref --verify --quiet refs/heads/data; then
+            git branch -D data
+            git push origin --delete data
+          fi
+          git checkout --orphan data
+          git reset --hard
+          cp -r ../artifact/* .
+          git add .
+          git commit -m "Generate and update data"
+          git push origin data
