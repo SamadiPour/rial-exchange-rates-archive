@@ -95,6 +95,8 @@ jobs:
         if: steps.verify_diff.outputs.changed == 'true' || inputs.force_update
         run: |
           mv artifact/ ../
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git fetch origin
           if git show-ref --verify --quiet refs/heads/data; then
             git branch -D data
