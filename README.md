@@ -90,6 +90,12 @@ Every night, the automated scripts generate three types of release files:
 > curl -Ls https://github.com/SamadiPour/rial-exchange-rates-archive/releases/latest/download/gregorian_imp.min.json | jq
 > ```
 
+> CORS Issue: If you are encountering CORS error while getting the release files, try one of these two links:
+> ```text
+> - https://raw.githubusercontent.com/SamadiPour/rial-exchange-rates-archive/data/gregorian_imp.min.json
+> - https://cdn.jsdelivr.net/gh/SamadiPour/rial-exchange-rates-archive@data/gregorian_imp.min.json
+> ```
+
 ## Usage
 
 You can access the historical exchange rate data by exploring the contents of this repository. The data is organized and
