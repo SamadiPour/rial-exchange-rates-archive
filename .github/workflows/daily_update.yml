@@ -94,7 +94,7 @@ jobs:
       - name: Push artifacts to data branch
         if: steps.verify_diff.outputs.changed == 'true' || inputs.force_update
         run: |
-          mv -r artifact/ ../
+          mv artifact/ ../
           git fetch origin
           if git show-ref --verify --quiet refs/heads/data; then
             git branch -D data
