@@ -100,9 +100,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git fetch origin
-          if git show-ref --verify --quiet refs/heads/data; then
-            git push origin --delete data
-          fi
+          git push origin --delete data || true
           git checkout --orphan data
           git reset --hard
           cp -r ../artifact/* .
