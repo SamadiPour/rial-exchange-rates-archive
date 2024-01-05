@@ -37,12 +37,14 @@ jobs:
           pip install bonbast jdatetime
 
       - name: Install Proxy
+        if: github.repository == 'SamadiPour/rial-exchange-rates-archive'
         run: |
           sudo snap install opera-proxy
           opera-proxy -country EU >/dev/null 2>&1 &
           sleep 10
 
       - name: Run get_next.py and aggregator.py
+        if: github.repository == 'SamadiPour/rial-exchange-rates-archive'
         run: |
           export http_proxy="http://127.0.0.1:18080"
           export https_proxy="http://127.0.0.1:18080"
