@@ -6,6 +6,11 @@ import jdatetime
 
 artifact_dir = 'artifact'
 
+currency_codes = ['usd', 'eur', 'gbp', 'chf', 'cad', 'aud', 'sek', 'nok', 'rub', 'thb', 'sgd', 'hkd', 'azn', 'amd',
+                  'dkk',
+                  'aed', 'jpy', 'try', 'cny', 'sar', 'inr', 'myr', 'afn', 'kwd', 'iqd', 'bhd', 'omr', 'qar', 'azadi1',
+                  'emami1', 'azadi1_2', 'azadi1_4', 'azadi1g']
+
 
 def remove_nested_key(data, key):
     if isinstance(data, dict):
@@ -56,6 +61,7 @@ def walker(base_directory: str, dt):
             )
     aggregated_json = aggregator(file_list)
     os.makedirs(artifact_dir, exist_ok=True)
+    os.makedirs(os.path.join(artifact_dir, 'currency'), exist_ok=True)
     with open(os.path.join(artifact_dir, f'{base_directory}_all.json'), "w", encoding="utf8") as f:
         json.dump(aggregated_json, f, ensure_ascii=False)
 
@@ -63,12 +69,20 @@ def walker(base_directory: str, dt):
     with open(os.path.join(artifact_dir, f'{base_directory}_all.min.json'), "w", encoding="utf8") as f:
         json.dump(aggregated_json, f, separators=(",", ":"), ensure_ascii=False)
 
-    for date, currencies in aggregated_json.items():
-        for currency in list(currencies.keys()):
-            if currency not in ['usd', 'eur', 'gbp']:
-                currencies.pop(currency)
+    # create file for each currency
+    for currency in currency_codes:
+        currency_data = {}
+        for date, data in aggregated_json.items():
+            if currency in data:
+                currency_data[date] = data[currency]
+        with open(os.path.join(artifact_dir, 'currency', f'{currency}.json'), "w", encoding="utf8") as f:
+            json.dump(currency_data, f, separators=(",", ":"), ensure_ascii=False)
+
+    imp_data = {}
+    for date, data in aggregated_json.items():
+        imp_data[date] = {key: value for key, value in data.items() if key in ['usd', 'eur', 'gbp']}
     with open(os.path.join(artifact_dir, f'{base_directory}_imp.min.json'), "w", encoding="utf8") as f:
-        json.dump(aggregated_json, f, separators=(",", ":"), ensure_ascii=False)
+        json.dump(imp_data, f, separators=(",", ":"), ensure_ascii=False)
 
 
 walker('gregorian', datetime)
