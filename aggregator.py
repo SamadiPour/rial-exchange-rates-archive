@@ -14,7 +14,7 @@ def aggregator(files: iter) -> dict:
     date_json_map = dict()
     for file_path in files:
         date_str = '/'.join(file_path.split('/')[1:])
-        with open(file_path) as f:
+        with open(file_path, encoding="utf8") as f:
             data = json.load(f)
         date_json_map[date_str] = data
     return date_json_map
@@ -55,8 +55,8 @@ def walker(base_directory: str, dt):
                     ],
                 )
             )
-            with open(os.path.join(path, 'full'), "w") as f:
-                json.dump(aggregated_json, f)
+            with open(os.path.join(path, 'full'), "w", encoding="utf8") as f:
+                json.dump(aggregated_json, f, ensure_ascii=False)
 
         # yearly
         path = os.path.join(base_directory, year)
@@ -77,8 +77,8 @@ def walker(base_directory: str, dt):
                 )
             )
         aggregated_json = aggregator(file_list)
-        with open(os.path.join(path, 'full'), "w") as f:
-            json.dump(aggregated_json, f)
+        with open(os.path.join(path, 'full'), "w", encoding="utf8") as f:
+            json.dump(aggregated_json, f, ensure_ascii=False)
 
 
 walker('gregorian', datetime)
