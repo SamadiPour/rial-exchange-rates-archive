@@ -7,9 +7,8 @@ import jdatetime
 artifact_dir = 'artifact'
 
 currency_codes = ['usd', 'eur', 'gbp', 'chf', 'cad', 'aud', 'sek', 'nok', 'rub', 'thb', 'sgd', 'hkd', 'azn', 'amd',
-                  'dkk',
-                  'aed', 'jpy', 'try', 'cny', 'sar', 'inr', 'myr', 'afn', 'kwd', 'iqd', 'bhd', 'omr', 'qar', 'azadi1',
-                  'emami1', 'azadi1_2', 'azadi1_4', 'azadi1g']
+                  'dkk', 'aed', 'jpy', 'try', 'cny', 'sar', 'inr', 'myr', 'afn', 'kwd', 'iqd', 'bhd', 'omr', 'qar',
+                  'azadi1', 'emami1', 'azadi1_2', 'azadi1_4', 'azadi1g']
 
 
 def remove_nested_key(data, key):
@@ -65,6 +64,8 @@ def walker(base_directory: str, dt):
                 )
             )
     aggregated_json = aggregator(file_list)
+    last_item_date = max(aggregated_json.items(), key=lambda x: x[0])[0]
+
     os.makedirs(artifact_dir, exist_ok=True)
     os.makedirs(os.path.join(artifact_dir, 'currency'), exist_ok=True)
 
@@ -74,6 +75,25 @@ def walker(base_directory: str, dt):
     # output for everything but in a compressed way
     remove_nested_key(aggregated_json, 'name')
     write_json(os.path.join(artifact_dir, f'{base_directory}_all.min.json'), aggregated_json, remove_spaces=True)
+
+    # Last 7 days output
+    end_date = dt.datetime.strptime(last_item_date, '%Y/%m/%d')
+    start_date = end_date - dt.timedelta(days=6)
+    date_list = [
+        (start_date + dt.timedelta(days=x)).strftime('%Y/%m/%d')
+        for x in range((end_date - start_date).days + 1)
+    ]
+    days_data = {date: aggregated_json[date] for date in date_list}
+    write_json(os.path.join(artifact_dir, f'{base_directory}_7days.min.json'), days_data, remove_spaces=True)
+
+    # Last 31 days output
+    start_date = end_date - dt.timedelta(days=30)
+    date_list = [
+        (start_date + dt.timedelta(days=x)).strftime('%Y/%m/%d')
+        for x in range((end_date - start_date).days + 1)
+    ]
+    days_data = {date: aggregated_json[date] for date in date_list}
+    write_json(os.path.join(artifact_dir, f'{base_directory}_31days.min.json'), days_data, remove_spaces=True)
 
     # create file for each currency
     for currency in currency_codes:
