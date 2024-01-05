@@ -27,6 +27,9 @@ def walker(base_directory: str, dt):
             if os.path.isdir(os.path.join(base_directory, d)) and d.isdigit()
         ],
     )
+    # store the all files of all years
+    full_history_files = []
+    
     for year in year_directories:
         month_directories = sorted(
             [
@@ -79,6 +82,15 @@ def walker(base_directory: str, dt):
         aggregated_json = aggregator(file_list)
         with open(os.path.join(path, 'full'), "w", encoding="utf8") as f:
             json.dump(aggregated_json, f, ensure_ascii=False)
+        
+        
+        full_history_files.extend(file_list)
+    
+    # ful history
+    aggregated_json = aggregator(full_history_files)
+    with open(os.path.join(base_directory, 'full'), "w", encoding="utf8") as f:
+        json.dump(aggregated_json, f, ensure_ascii=False)
+        
 
 
 walker('gregorian', datetime)
