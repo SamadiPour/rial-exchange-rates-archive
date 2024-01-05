@@ -34,6 +34,11 @@ def aggregator(files: iter) -> dict:
     return date_json_map
 
 
+def write_json(path: str, data: dict, remove_spaces: bool):
+    with open(path, "w", encoding="utf8") as f:
+        json.dump(data, f, ensure_ascii=False, separators=(",", ":") if remove_spaces else None)
+
+
 def walker(base_directory: str, dt):
     file_list = []
     year_directories = sorted(
@@ -62,12 +67,13 @@ def walker(base_directory: str, dt):
     aggregated_json = aggregator(file_list)
     os.makedirs(artifact_dir, exist_ok=True)
     os.makedirs(os.path.join(artifact_dir, 'currency'), exist_ok=True)
-    with open(os.path.join(artifact_dir, f'{base_directory}_all.json'), "w", encoding="utf8") as f:
-        json.dump(aggregated_json, f, ensure_ascii=False)
 
+    # output the full file without any changes
+    write_json(os.path.join(artifact_dir, f'{base_directory}_all.json'), aggregated_json, remove_spaces=False)
+
+    # output for everything but in a compressed way
     remove_nested_key(aggregated_json, 'name')
-    with open(os.path.join(artifact_dir, f'{base_directory}_all.min.json'), "w", encoding="utf8") as f:
-        json.dump(aggregated_json, f, separators=(",", ":"), ensure_ascii=False)
+    write_json(os.path.join(artifact_dir, f'{base_directory}_all.min.json'), aggregated_json, remove_spaces=True)
 
     # create file for each currency
     for currency in currency_codes:
@@ -75,14 +81,13 @@ def walker(base_directory: str, dt):
         for date, data in aggregated_json.items():
             if currency in data:
                 currency_data[date] = data[currency]
-        with open(os.path.join(artifact_dir, 'currency', f'{currency}.json'), "w", encoding="utf8") as f:
-            json.dump(currency_data, f, separators=(",", ":"), ensure_ascii=False)
+        write_json(os.path.join(artifact_dir, 'currency', f'{currency}.json'), currency_data, remove_spaces=True)
 
+    # output for impt currencies (usd-eur-gbp)
     imp_data = {}
     for date, data in aggregated_json.items():
         imp_data[date] = {key: value for key, value in data.items() if key in ['usd', 'eur', 'gbp']}
-    with open(os.path.join(artifact_dir, f'{base_directory}_imp.min.json'), "w", encoding="utf8") as f:
-        json.dump(imp_data, f, separators=(",", ":"), ensure_ascii=False)
+    write_json(os.path.join(artifact_dir, f'{base_directory}_imp.min.json'), imp_data, remove_spaces=True)
 
 
 walker('gregorian', datetime)
