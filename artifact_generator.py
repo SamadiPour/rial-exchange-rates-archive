@@ -6,6 +6,10 @@ import jdatetime
 
 artifact_dir = 'artifact'
 
+currency_codes = ['usd', 'eur', 'gbp', 'chf', 'cad', 'aud', 'sek', 'nok', 'rub', 'thb', 'sgd', 'hkd', 'azn', 'amd',
+                  'dkk', 'aed', 'jpy', 'try', 'cny', 'sar', 'inr', 'myr', 'afn', 'kwd', 'iqd', 'bhd', 'omr', 'qar',
+                  'azadi1', 'emami1', 'azadi1_2', 'azadi1_4', 'azadi1g']
+
 
 def remove_nested_key(data, key):
     if isinstance(data, dict):
@@ -27,6 +31,11 @@ def aggregator(files: iter) -> dict:
             data = json.load(f)
         date_json_map[date_str] = data
     return date_json_map
+
+
+def write_json(path: str, data: dict, remove_spaces: bool):
+    with open(path, "w", encoding="utf8") as f:
+        json.dump(data, f, ensure_ascii=False, separators=(",", ":") if remove_spaces else None)
 
 
 def walker(base_directory: str, dt):
@@ -55,20 +64,50 @@ def walker(base_directory: str, dt):
                 )
             )
     aggregated_json = aggregator(file_list)
+    last_item_date = max(aggregated_json.items(), key=lambda x: x[0])[0]
+
     os.makedirs(artifact_dir, exist_ok=True)
-    with open(os.path.join(artifact_dir, f'{base_directory}_all.json'), "w", encoding="utf8") as f:
-        json.dump(aggregated_json, f, ensure_ascii=False)
+    os.makedirs(os.path.join(artifact_dir, 'currency'), exist_ok=True)
 
+    # output the full file without any changes
+    write_json(os.path.join(artifact_dir, f'{base_directory}_all.json'), aggregated_json, remove_spaces=False)
+
+    # output for everything but in a compressed way
     remove_nested_key(aggregated_json, 'name')
-    with open(os.path.join(artifact_dir, f'{base_directory}_all.min.json'), "w", encoding="utf8") as f:
-        json.dump(aggregated_json, f, separators=(",", ":"), ensure_ascii=False)
+    write_json(os.path.join(artifact_dir, f'{base_directory}_all.min.json'), aggregated_json, remove_spaces=True)
 
-    for date, currencies in aggregated_json.items():
-        for currency in list(currencies.keys()):
-            if currency not in ['usd', 'eur', 'gbp']:
-                currencies.pop(currency)
-    with open(os.path.join(artifact_dir, f'{base_directory}_imp.min.json'), "w", encoding="utf8") as f:
-        json.dump(aggregated_json, f, separators=(",", ":"), ensure_ascii=False)
+    # Last 7 days output
+    end_date = dt.datetime.strptime(last_item_date, '%Y/%m/%d')
+    start_date = end_date - dt.timedelta(days=6)
+    date_list = [
+        (start_date + dt.timedelta(days=x)).strftime('%Y/%m/%d')
+        for x in range((end_date - start_date).days + 1)
+    ]
+    days_data = {date: aggregated_json[date] for date in date_list}
+    write_json(os.path.join(artifact_dir, f'{base_directory}_7days.min.json'), days_data, remove_spaces=True)
+
+    # Last 31 days output
+    start_date = end_date - dt.timedelta(days=30)
+    date_list = [
+        (start_date + dt.timedelta(days=x)).strftime('%Y/%m/%d')
+        for x in range((end_date - start_date).days + 1)
+    ]
+    days_data = {date: aggregated_json[date] for date in date_list}
+    write_json(os.path.join(artifact_dir, f'{base_directory}_31days.min.json'), days_data, remove_spaces=True)
+
+    # create file for each currency
+    for currency in currency_codes:
+        currency_data = {}
+        for date, data in aggregated_json.items():
+            if currency in data:
+                currency_data[date] = data[currency]
+        write_json(os.path.join(artifact_dir, 'currency', f'{currency}.json'), currency_data, remove_spaces=True)
+
+    # output for impt currencies (usd-eur-gbp)
+    imp_data = {}
+    for date, data in aggregated_json.items():
+        imp_data[date] = {key: value for key, value in data.items() if key in ['usd', 'eur', 'gbp']}
+    write_json(os.path.join(artifact_dir, f'{base_directory}_imp.min.json'), imp_data, remove_spaces=True)
 
 
 walker('gregorian', datetime)
