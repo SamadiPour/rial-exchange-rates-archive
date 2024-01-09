@@ -14,7 +14,7 @@ Please note that all prices in this repository are in `Toman`.
 - [Structure](#structure)
     * [`{year}/{month}/{day}` file model](#yearmonthday-file-model)
     * [`full` file model](#full-file-model)
-- [Releases](#releases)
+- [Files](#files)
 - [Usage](#usage)
     * [Getting exchange rates for specific date](#getting-exchange-rates-for-specific-date)
     * [Converting `full` file to date-price map/dict](#converting-full-file-to-date-price-mapdict)
@@ -77,20 +77,32 @@ This file contains every single day with the same DTO structure.
 }
 ```
 
-## Releases
+## Files
 
-Every night, the automated scripts generate three types of release files:
+Every night, automated scripts generate the following types of release files:
 
-- `_all.json` file: Contains all the information from the start
-- `_all.min.json` file: Similar to the previous one, but whitespaces and the `name` field (from currency DTO) removed
-- `_imp.min.json` file: Similar to the previous one, but only for USD, EUR, and GBP
+- `{calende}_all.json`: Contains all the information from the start
+- `{calende}_all.min.json`: Similar to the previous one, but whitespaces and the `name` field (from currency DTO) is
+  removed
+- `{calende}_imp.min.json`: Similar to the previous one, but only for USD, EUR, and GBP
+- `{calende}_31days.min.json`: Contains all currencies in the past 31 days
+- `{calende}_7days.min.json`: Contains all currencies in the past 7 days
 
 > Note: Only the last 10 releases are retained. That means you always have to a get the last one like this:
 > ```bash
 > curl -Ls https://github.com/SamadiPour/rial-exchange-rates-archive/releases/latest/download/gregorian_imp.min.json | jq
 > ```
 
-> CORS Issue: If you are encountering CORS error while getting the release files, try one of these two links:
+### `data` branch files
+
+This repository also includes an orphan branch that contains generated outputs. The branch will always have just one
+commit and no history. The data stored in this branch is identical to the release section, but it also includes the
+following files:
+
+- `/currency/{currency-code}.json`: Contains currency specific information from the start
+
+> CORS Issue: If you are encountering CORS error while getting the release files, you can instead use the files stored
+> in the `data` branch. For example, try one of these two links:
 > ```text
 > - https://raw.githubusercontent.com/SamadiPour/rial-exchange-rates-archive/data/gregorian_imp.min.json
 > - https://cdn.jsdelivr.net/gh/SamadiPour/rial-exchange-rates-archive@data/gregorian_imp.min.json
