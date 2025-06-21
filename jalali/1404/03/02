@@ -1,167 +1,167 @@
 {
   "usd": {
     "name": "US Dollar",
-    "sell": 93700,
-    "buy": 93600
+    "sell": 83500,
+    "buy": 83400
   },
   "eur": {
     "name": "Euro",
-    "sell": 107950,
-    "buy": 107850
+    "sell": 94750,
+    "buy": 94650
   },
   "gbp": {
     "name": "British Pound",
-    "sell": 126250,
-    "buy": 126050
+    "sell": 112800,
+    "buy": 112600
   },
   "chf": {
     "name": "Swiss Franc",
-    "sell": 114650,
-    "buy": 114550
+    "sell": 101650,
+    "buy": 101550
   },
   "cad": {
     "name": "Canadian Dollar",
-    "sell": 68250,
-    "buy": 68150
+    "sell": 60700,
+    "buy": 60600
   },
   "aud": {
     "name": "Australian Dollar",
-    "sell": 60600,
-    "buy": 60500
+    "sell": 54050,
+    "buy": 53950
   },
   "sek": {
     "name": "Swedish Krona",
-    "sell": 9685,
-    "buy": 9685
+    "sell": 8760,
+    "buy": 8760
   },
   "nok": {
     "name": "Norwegian Krone",
-    "sell": 9265,
-    "buy": 9265
+    "sell": 8255,
+    "buy": 8255
   },
   "rub": {
     "name": "Russian Ruble",
-    "sell": 1195,
-    "buy": 1190
+    "sell": 1050,
+    "buy": 1045
   },
   "thb": {
     "name": "Thai Baht",
-    "sell": 2860,
-    "buy": 2855
+    "sell": 2570,
+    "buy": 2565
   },
   "sgd": {
     "name": "Singapore Dollar",
-    "sell": 72850,
-    "buy": 72750
+    "sell": 65000,
+    "buy": 64900
   },
   "hkd": {
     "name": "Hong Kong Dollar",
-    "sell": 11950,
-    "buy": 11850
+    "sell": 10650,
+    "buy": 10550
   },
   "azn": {
     "name": "Azerbaijani Manat",
-    "sell": 55200,
-    "buy": 55100
+    "sell": 49050,
+    "buy": 48950
   },
   "amd": {
     "name": "10 Armenian Dram",
-    "sell": 2430,
-    "buy": 2425
+    "sell": 2175,
+    "buy": 2170
   },
   "dkk": {
     "name": "Danish Krone",
-    "sell": 14450,
-    "buy": 14350
+    "sell": 12700,
+    "buy": 12600
   },
   "aed": {
     "name": "UAE Dirham",
-    "sell": 26000,
-    "buy": 25950
+    "sell": 22500,
+    "buy": 22450
   },
   "jpy": {
     "name": "10 Japanese Yen",
-    "sell": 6425,
-    "buy": 6415
+    "sell": 5855,
+    "buy": 5845
   },
   "try": {
     "name": "Turkish Lira",
-    "sell": 2360,
-    "buy": 2340
+    "sell": 2140,
+    "buy": 2120
   },
   "cny": {
     "name": "Chinese Yuan",
-    "sell": 13050,
-    "buy": 13050
+    "sell": 11600,
+    "buy": 11600
   },
   "sar": {
     "name": "Saudi Riyal",
-    "sell": 24950,
-    "buy": 24850
+    "sell": 22250,
+    "buy": 22150
   },
   "inr": {
     "name": "Indian Rupee",
-    "sell": 1080,
-    "buy": 1075
+    "sell": 980,
+    "buy": 975
   },
   "myr": {
     "name": "Malaysian Ringgit",
-    "sell": 22050,
-    "buy": 21950
+    "sell": 19750,
+    "buy": 19650
   },
   "afn": {
     "name": "Afghan Afghani",
-    "sell": 1320,
-    "buy": 1315
+    "sell": 1195,
+    "buy": 1190
   },
   "kwd": {
     "name": "Kuwaiti Dinar",
-    "sell": 305850,
-    "buy": 305450
+    "sell": 272300,
+    "buy": 271900
   },
   "iqd": {
     "name": "100 Iraqi Dinar",
-    "sell": 7150,
-    "buy": 7140
+    "sell": 6370,
+    "buy": 6360
   },
   "bhd": {
     "name": "Bahraini Dinar",
-    "sell": 248350,
-    "buy": 247850
+    "sell": 221450,
+    "buy": 220950
   },
   "omr": {
     "name": "Omani Rial",
-    "sell": 243650,
-    "buy": 243350
+    "sell": 216900,
+    "buy": 216600
   },
   "qar": {
     "name": "Qatari Rial",
-    "sell": 25700,
-    "buy": 25600
+    "sell": 22900,
+    "buy": 22800
   },
   "azadi1": {
     "name": "azadi",
     "sell": 68500000,
-    "buy": 67200000
+    "buy": 66500000
   },
   "emami1": {
     "name": "emami",
-    "sell": 75900000,
-    "buy": 75000000
+    "sell": 74000000,
+    "buy": 72700000
   },
   "azadi1_2": {
     "name": "½ azadi",
-    "sell": 42200000,
-    "buy": 41200000
+    "sell": 42500000,
+    "buy": 41500000
   },
   "azadi1_4": {
     "name": "¼ azadi",
-    "sell": 24800000,
-    "buy": 24000000
+    "sell": 25000000,
+    "buy": 23500000
   },
   "azadi1g": {
     "name": "gerami",
-    "sell": 13900000,
-    "buy": 13300000
+    "sell": 13600000,
+    "buy": 13200000
   }
 }
