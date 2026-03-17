@@ -32,6 +32,11 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+
       - name: Install Dependencies
         run: |
           pip install bonbast jdatetime
@@ -39,7 +44,7 @@ jobs:
       - name: Install Proxy
         if: github.repository == 'SamadiPour/rial-exchange-rates-archive'
         run: |
-          sudo snap install opera-proxy
+          go install github.com/Snawoot/opera-proxy@v1.15.0
           opera-proxy -country EU >/dev/null 2>&1 &
           sleep 10
 
