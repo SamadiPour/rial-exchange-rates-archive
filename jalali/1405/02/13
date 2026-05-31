@@ -1,0 +1,167 @@
+{
+  "usd": {
+    "name": "US Dollar",
+    "sell": 189100,
+    "buy": 189000
+  },
+  "eur": {
+    "name": "Euro",
+    "sell": 221750,
+    "buy": 221550
+  },
+  "gbp": {
+    "name": "British Pound",
+    "sell": 257200,
+    "buy": 257000
+  },
+  "chf": {
+    "name": "Swiss Franc",
+    "sell": 242050,
+    "buy": 241850
+  },
+  "cad": {
+    "name": "Canadian Dollar",
+    "sell": 139200,
+    "buy": 139100
+  },
+  "aud": {
+    "name": "Australian Dollar",
+    "sell": 136150,
+    "buy": 136050
+  },
+  "sek": {
+    "name": "Swedish Krona",
+    "sell": 20450,
+    "buy": 20350
+  },
+  "nok": {
+    "name": "Norwegian Krone",
+    "sell": 20400,
+    "buy": 20400
+  },
+  "rub": {
+    "name": "Russian Ruble",
+    "sell": 2520,
+    "buy": 2515
+  },
+  "thb": {
+    "name": "Thai Baht",
+    "sell": 5815,
+    "buy": 5810
+  },
+  "sgd": {
+    "name": "Singapore Dollar",
+    "sell": 148400,
+    "buy": 148300
+  },
+  "hkd": {
+    "name": "Hong Kong Dollar",
+    "sell": 24150,
+    "buy": 24050
+  },
+  "azn": {
+    "name": "Azerbaijani Manat",
+    "sell": 111000,
+    "buy": 110900
+  },
+  "amd": {
+    "name": "10 Armenian Dram",
+    "sell": 5100,
+    "buy": 5095
+  },
+  "dkk": {
+    "name": "Danish Krone",
+    "sell": 29700,
+    "buy": 29600
+  },
+  "aed": {
+    "name": "UAE Dirham",
+    "sell": 51000,
+    "buy": 50950
+  },
+  "jpy": {
+    "name": "10 Japanese Yen",
+    "sell": 12100,
+    "buy": 12100
+  },
+  "try": {
+    "name": "Turkish Lira",
+    "sell": 4190,
+    "buy": 4170
+  },
+  "cny": {
+    "name": "Chinese Yuan",
+    "sell": 27700,
+    "buy": 27700
+  },
+  "sar": {
+    "name": "Saudi Riyal",
+    "sell": 50450,
+    "buy": 50350
+  },
+  "inr": {
+    "name": "Indian Rupee",
+    "sell": 1990,
+    "buy": 1985
+  },
+  "myr": {
+    "name": "Malaysian Ringgit",
+    "sell": 47650,
+    "buy": 47550
+  },
+  "afn": {
+    "name": "Afghan Afghani",
+    "sell": 2955,
+    "buy": 2950
+  },
+  "kwd": {
+    "name": "Kuwaiti Dinar",
+    "sell": 615400,
+    "buy": 615000
+  },
+  "iqd": {
+    "name": "100 Iraqi Dinar",
+    "sell": 14450,
+    "buy": 14450
+  },
+  "bhd": {
+    "name": "Bahraini Dinar",
+    "sell": 500750,
+    "buy": 500250
+  },
+  "omr": {
+    "name": "Omani Rial",
+    "sell": 491500,
+    "buy": 491200
+  },
+  "qar": {
+    "name": "Qatari Rial",
+    "sell": 51900,
+    "buy": 51800
+  },
+  "azadi1": {
+    "name": "azadi",
+    "sell": 201000000,
+    "buy": 196000000
+  },
+  "emami1": {
+    "name": "emami",
+    "sell": 206000000,
+    "buy": 203000000
+  },
+  "azadi1_2": {
+    "name": "½ azadi",
+    "sell": 107000000,
+    "buy": 103000000
+  },
+  "azadi1_4": {
+    "name": "¼ azadi",
+    "sell": 60000000,
+    "buy": 56500000
+  },
+  "azadi1g": {
+    "name": "gerami",
+    "sell": 30000000,
+    "buy": 27000000
+  }
+}
