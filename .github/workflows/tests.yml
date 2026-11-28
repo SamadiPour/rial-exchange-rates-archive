@@ -1,0 +1,18 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+    paths: ["rates_archive/**", "tests/**", "pyproject.toml", "uv.lock", ".github/workflows/tests.yml"]
+  pull_request:
+    paths: ["rates_archive/**", "tests/**", "pyproject.toml", "uv.lock", ".github/workflows/tests.yml"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.4.0
+      # Test against the bonbast version the daily workflow would use: the newest 2.x.
+      - run: uv sync --upgrade-package bonbast
+      - run: uv run --no-sync pytest

@@ -20,6 +20,7 @@ Please note that all prices in this repository are in `Toman`.
     * [Converting `full` file to date-price map/dict](#converting-full-file-to-date-price-mapdict)
     * [Converting `full` files to array/list](#converting-full-files-to-arraylist)
 - [Currencies](#currencies)
+- [Development](#development)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -41,7 +42,8 @@ and type of files, with the only difference being the date.
 │       └── {month}
 │           ├── full -> contain every day in that month
 │           └── {day}
-└── automated-python-scripts
+├── rates_archive -> the scripts that update the archive (see Development)
+└── tests
 ```
 
 ### `{year}/{month}/{day}` file model
@@ -60,10 +62,13 @@ These files contain the daily currency conversion rates. They all have the same 
 }
 ```
 
+Currency codes are always lowercase (`usd`, `azadi1`); see [Currencies](#currencies). On the few days bonbast has no buy
+price for a currency, `buy` is left out.
+
 ### `full` file model
 
-If a year or a month has ended and the last day exists, a corresponding `full` file is available in the same directory.
-This file contains every single day with the same DTO structure.
+Every year and month directory has a `full` file that contains every day in it (so far, for the current year and month)
+with the same DTO structure.
 
 ```text
 {
@@ -81,12 +86,14 @@ This file contains every single day with the same DTO structure.
 
 Every night, automated scripts generate the following types of release files:
 
-- `{calende}_all.json`: Contains all the information from the start
-- `{calende}_all.min.json`: Similar to the previous one, but whitespaces and the `name` field (from currency DTO) is
+- `{calendar}_all.json`: Contains all the information from the start
+- `{calendar}_all.min.json`: Similar to the previous one, but whitespaces and the `name` field (from currency DTO) is
   removed
-- `{calende}_imp.min.json`: Similar to the previous one, but only for USD, EUR, and GBP
-- `{calende}_31days.min.json`: Contains all currencies in the past 31 days
-- `{calende}_7days.min.json`: Contains all currencies in the past 7 days
+- `{calendar}_imp.min.json`: Similar to the previous one, but only for USD, EUR, and GBP
+- `{calendar}_31days.min.json`: Contains all currencies in the past 31 days
+- `{calendar}_7days.min.json`: Contains all currencies in the past 7 days
+
+`{calendar}` is `gregorian` or `jalali`.
 
 > Note: Only the last 10 releases are retained. That means you always have to a get the last one like this:
 > ```bash
@@ -99,7 +106,7 @@ This repository also includes an orphan branch that contains generated outputs. 
 commit and no history. The data stored in this branch is identical to the release section, but it also includes the
 following files:
 
-- `/currency/{currency-code}.json`: Contains currency specific information from the start
+- `/currency/{currency-code}.json`: Contains currency specific information from the start, keyed by Jalali dates
 
 > CORS Issue: If you are encountering CORS error while getting the release files, you can instead use the files stored
 > in the `data` branch. For example, try one of these two links:
@@ -293,6 +300,26 @@ fetch('https://raw.githubusercontent.com/SamadiPour/rial-exchange-rates-archive/
 | ½ Azadi | azadi1_2 |
 | ¼ Azadi | azadi1_4 |
 | Gerami  | azadi1g  |
+
+## Development
+
+The [daily workflow](.github/workflows/daily_update.yml) runs the `rates_archive` package. It needs
+[uv](https://docs.astral.sh/uv/):
+
+```bash
+uv sync
+uv run python -m rates_archive fetch       # fetch every missing day up to yesterday (Tehran time)
+uv run python -m rates_archive aggregate   # rebuild the `full` files
+uv run python -m rates_archive verify      # check for gaps, format drift and gregorian/jalali mismatches
+uv run python -m rates_archive artifacts   # write the release files to artifact/
+uv run pytest
+```
+
+`fetch` starts from the day after the newest stored day, so a missed run is caught up by the next one. It stores every
+day under both calendars, in the format above, whatever format the `bonbast` package returns. If a day cannot be
+fetched it stops there, so the archive never has a gap. Run `python -m rates_archive fetch --help` for its options.
+
+If `verify` reports files that are not in the archive's format, `python -m rates_archive normalize` rewrites them.
 
 ## Contributing
 

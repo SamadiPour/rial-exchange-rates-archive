@@ -1,0 +1,28 @@
+[project]
+name = "rial-exchange-rates-archive"
+version = "0"
+description = "Daily archive of Iranian Rial exchange rates from bonbast.com"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = [
+    # Only the major version is pinned: CI takes the newest 2.x on every run (see the workflows),
+    # so fixes for changes on bonbast.com arrive without a lockfile update. The archive converts
+    # what bonbast returns to its own format (see rates_archive/catalog.py), but a new major
+    # version may change the API, so take one only after testing it.
+    "bonbast>=2,<3",
+    "jdatetime>=5.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = ["-ra", "--strict-markers"]

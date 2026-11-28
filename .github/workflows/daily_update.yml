@@ -19,6 +19,11 @@ on:
 permissions:
   contents: write
 
+# Two runs at once would race on the commit and on the data branch.
+concurrency:
+  group: daily-update
+  cancel-in-progress: false
+
 jobs:
   update_data:
     runs-on: ubuntu-latest
@@ -27,19 +32,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v7
 
-      - name: Set up Python
-        uses: actions/setup-python@v7
-        with:
-          python-version: '3.11'
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v10.4.0
+
+      # Everything comes from uv.lock except bonbast, which is upgraded to the newest 2.x
+      # (pyproject.toml pins only its major version). The updated uv.lock is not committed.
+      - name: Install Dependencies
+        run: uv sync --no-dev --upgrade-package bonbast
 
       - name: Set up Go
+        if: github.repository == 'SamadiPour/rial-exchange-rates-archive'
         uses: actions/setup-go@v7
         with:
           go-version: 'stable'
-
-      - name: Install Dependencies
-        run: |
-          pip install bonbast jdatetime
 
       - name: Install Proxy
         if: github.repository == 'SamadiPour/rial-exchange-rates-archive'
@@ -48,13 +53,23 @@ jobs:
           opera-proxy -country EU >/dev/null 2>&1 &
           sleep 10
 
-      - name: Run get_next.py and aggregator.py
+      # Fetches every day from the newest stored one up to yesterday in Tehran, so missed runs
+      # are caught up. A failure here must not lose the days that were fetched before it, so the
+      # job carries on and fails at the end instead.
+      - name: Fetch missing days
+        id: fetch
         if: github.repository == 'SamadiPour/rial-exchange-rates-archive'
-        run: |
-          export http_proxy="http://127.0.0.1:18080"
-          export https_proxy="http://127.0.0.1:18080"
-          python get_next.py
-          python aggregator.py
+        continue-on-error: true
+        env:
+          http_proxy: "http://127.0.0.1:18080"
+          https_proxy: "http://127.0.0.1:18080"
+        run: uv run --no-sync python -m rates_archive fetch
+
+      - name: Rebuild full files
+        run: uv run --no-sync python -m rates_archive aggregate
+
+      - name: Verify archive
+        run: uv run --no-sync python -m rates_archive verify
 
       - name: Setup tmate session
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
@@ -63,14 +78,17 @@ jobs:
       - name: Check if there are any changes
         id: verify_diff
         run: |
-          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
+          # git status, unlike git diff, also sees the new day files and directories.
+          if [ -n "$(git status --porcelain -- gregorian jalali)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Commit and Push Changes
         if: steps.verify_diff.outputs.changed == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add gregorian/* jalali/*
+          git add gregorian jalali
           git commit -m "Update data - $(date +'%Y/%m/%d')"
           git push
 
@@ -79,7 +97,7 @@ jobs:
         run: |
           echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "RELEASE_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
-          python artifact_generator.py
+          uv run --no-sync python -m rates_archive artifacts
 
       - name: Upload result as release
         if: steps.verify_diff.outputs.changed == 'true' || inputs.force_update
@@ -99,17 +117,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Replaces the data branch with a single commit holding artifact/, in one force push, so the
+      # branch never disappears in between. A separate index leaves the checkout untouched.
       - name: Push artifacts to data branch
         if: steps.verify_diff.outputs.changed == 'true' || inputs.force_update
         run: |
-          mv artifact/ ../
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git fetch origin
-          git push origin --delete data || true
-          git checkout --orphan data
-          git reset --hard
-          cp -r ../artifact/* .
-          git add .
-          git commit -m "Generate and update data"
-          git push origin data
+          export GIT_INDEX_FILE="$RUNNER_TEMP/data-branch-index"
+          git --work-tree=artifact add --all
+          commit=$(git commit-tree "$(git write-tree)" -m "Generate and update data")
+          git push --force origin "${commit}:refs/heads/data"
+
+      - name: Fail if the archive is behind
+        if: steps.fetch.outcome == 'failure'
+        run: |
+          echo "::error::Fetching failed and the archive is more than a day behind; see the 'Fetch missing days' step."
+          exit 1
