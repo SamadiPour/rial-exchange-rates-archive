@@ -45,6 +45,8 @@ jobs:
         uses: actions/setup-go@v7
         with:
           go-version: 'stable'
+          # There is no go.mod to key a cache on; only opera-proxy is installed.
+          cache: false
 
       - name: Install Proxy
         if: github.repository == 'SamadiPour/rial-exchange-rates-archive'
@@ -108,14 +110,20 @@ jobs:
           tag: ${{ env.TAG_NAME }}
           name: ${{ env.RELEASE_NAME }}
 
+      # Keeps the 10 newest releases and deletes the rest with their tags. Uses gh instead of
+      # dev-drprasad/delete-older-releases, which is unmaintained and still runs on Node.js 20.
       - name: Delete old releases
         if: steps.verify_diff.outputs.changed == 'true' || inputs.force_update
-        uses: dev-drprasad/delete-older-releases@v0.3.4
-        with:
-          keep_latest: 10
-          delete_tags: true
+        shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release list --limit 1000 --json tagName,createdAt \
+            --jq 'sort_by(.createdAt) | reverse | .[10:][] | .tagName' |
+          while read -r tag; do
+            gh release delete "$tag" --cleanup-tag --yes
+          done
 
       # Replaces the data branch with a single commit holding artifact/, in one force push, so the
       # branch never disappears in between. A separate index leaves the checkout untouched.
